@@ -1,9 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.PriorityQueue;
 
 public class Main {
 
@@ -11,16 +9,18 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         int N = Integer.parseInt(br.readLine());
-        List<Integer> list = new ArrayList<>();
+        PriorityQueue<Integer> que = new PriorityQueue<>((a, b) -> b - a);
 
         for (int i = 0; i < N; i++) {
             String[] inputs = br.readLine().split(" ");
             for (int j = 0; j < N; j++) {
-                list.add(Integer.parseInt(inputs[j]));
+                que.offer(Integer.parseInt(inputs[j]));
             }
         }
 
-        Collections.sort(list, Collections.reverseOrder());
-        System.out.println(list.get(N - 1));
+        for (int i = 0; i < N - 1; i++) {
+            que.poll();
+        }
+        System.out.println(que.poll());
     }
 }
