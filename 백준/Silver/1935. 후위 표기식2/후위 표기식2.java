@@ -1,9 +1,8 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -12,27 +11,23 @@ public class Main {
         int N = Integer.parseInt(br.readLine());
         char[] cArr = br.readLine().toCharArray();
 
-        Map<Character, Integer> map = new HashMap<>();
+        double[] dArr = new double[26];
         for (int i = 0; i < N; i++) {
-            int num = Integer.parseInt(br.readLine());
-            char c = (char) ('A' + i);
-            map.put(c, num);
+            dArr[i] = Double.parseDouble(br.readLine());
         }
 
-        Stack<Double> stack = new Stack<>();
-        for (int i = 0; i < cArr.length; i++) {
-            char c = cArr[i];
+        Deque<Double> st = new ArrayDeque<>();
+        for (char c : cArr) {
             if (isAlphabet(c)) {
-                stack.push((double) map.get(c));
+                st.push(dArr[c - 'A']);
             } else {
-                double b = stack.pop();
-                double a = stack.pop();
-                double calculateResult = calculate(a, b, c);
-                stack.push(calculateResult);
+                double b = st.pop();
+                double a = st.pop();
+                st.push(calculate(a, b, c));
             }
         }
 
-        System.out.println(String.format("%.2f", stack.pop()));
+        System.out.printf("%.2f", st.pop());
     }
 
     static boolean isAlphabet(char c) {
@@ -49,8 +44,6 @@ public class Main {
                 return a * b;
             case '/':
                 return a / b;
-            case '%':
-                return a % b;
             default:
                 throw new IllegalArgumentException();
         }
