@@ -1,7 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.PriorityQueue;
+import java.util.Stack;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -9,30 +9,25 @@ public class Main {
         StringBuilder sb = new StringBuilder();
 
         int N = Integer.parseInt(br.readLine());
-        boolean[] visited = new boolean[N + 1];
 
-        PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> b - a);
+        Stack<Integer> st = new Stack<>();
         int next = 0;
-        for (int i = 0; i < N; i++) {
+        while (N-- > 0) {
             int input = Integer.parseInt(br.readLine());
-
-            if (input > next) { // Queue에 수열 삽입
-                for (int num = next + 1; num <= input; num++) {
-                    if (!visited[num]) {
-                        visited[num] = true;
-                        pq.offer(num);
-                        sb.append("+\n");
-                    }
+            if (input > next) {
+                for (int i = next + 1; i <= input; i++) {
+                    st.push(i);
+                    sb.append("+\n");
                 }
-                pq.poll();
+                st.pop();
                 sb.append("-\n");
                 next = input;
-            } else { // pop
-                if (pq.peek() != input) {
+            } else {
+                if (st.peek() != input) {
                     System.out.println("NO");
                     return;
                 }
-                pq.poll();
+                st.pop();
                 sb.append("-\n");
             }
         }
