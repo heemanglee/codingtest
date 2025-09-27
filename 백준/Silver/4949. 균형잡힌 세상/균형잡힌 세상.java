@@ -1,7 +1,8 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -9,40 +10,44 @@ public class Main {
         StringBuilder sb = new StringBuilder();
 
         while (true) {
-            char[] cArr = br.readLine().toCharArray();
-            if (cArr.length == 1 && cArr[0] == '.') {
+            String inputs = br.readLine();
+            if (inputs.equals(".")) {
                 break;
             }
 
-            Stack<Character> stack = new Stack<>();
-            boolean isBreak = false;
-            for (char c : cArr) {
-                if (c == '(' || c == '[') {
-                    stack.push(c);
-                } else if (c == ')') {
-                    if (stack.isEmpty() || stack.peek() == '[') {
-                        sb.append("no\n");
-                        isBreak = true;
+            Deque<Character> dq = new ArrayDeque<>();
+            boolean ok = true;
+
+            for (int i = 0; i < inputs.length(); i++) {
+                char c = inputs.charAt(i);
+                switch (c) {
+                    case '(':
+                    case '[':
+                        dq.push(c);
                         break;
-                    }
-                    stack.pop();
-                } else if (c == ']') {
-                    if (stack.isEmpty() || stack.peek() == '(') {
-                        sb.append("no\n");
-                        isBreak = true;
+                    case ')':
+                        if (dq.isEmpty() || dq.peek() != '(') {
+                            ok = false;
+                            break;
+                        } else {
+                            dq.pop();
+                        }
                         break;
-                    }
-                    stack.pop();
+                    case ']':
+                        if (dq.isEmpty() || dq.peek() != '[') {
+                            ok = false;
+                            break;
+                        } else {
+                            dq.pop();
+                        }
+                        break;
+                    default:
                 }
+
+                if (!ok) break;
             }
 
-            if (!isBreak) {
-                if (stack.isEmpty()) {
-                    sb.append("yes\n");
-                } else {
-                    sb.append("no\n");
-                }
-            }
+            sb.append(ok && dq.isEmpty() ? "yes\n" : "no\n");
         }
 
         System.out.println(sb);
