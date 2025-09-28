@@ -2,7 +2,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -16,56 +15,34 @@ public class Main {
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
 
-        List<Integer> list = new LinkedList<>();
-        for (int i = 0; i < N; i++) {
-            list.add(i + 1);
+        LinkedList<Integer> list = new LinkedList<>();
+        for (int i = 1; i <= N; i++) {
+            list.offer(i);
         }
 
-        int count = 0;
         st = new StringTokenizer(br.readLine());
+        int count = 0;
         while (st.hasMoreTokens()) {
             int pick = Integer.parseInt(st.nextToken());
-            if (isAvailablePick(list, pick)) {
-                list.remove(0);
-                continue;
-            }
 
-            // 2번 연산과 3번 연산 횟수 비교
-            int left = 0;
-            List<Integer> tmp1 = new LinkedList<>(list);
-            while (true) {
-                if (isAvailablePick(tmp1, pick)) {
-                    break;
-                }
-                tmp1.add(tmp1.remove(0));
-                left++;
-            }
-
-            int right = 0;
-            List<Integer> tmp2 = new LinkedList<>(list);
-            while (true) {
-                if (isAvailablePick(tmp2, pick)) {
-                    break;
-                }
-                int lastIdx = tmp2.size() - 1;
-                tmp2.add(0, tmp2.remove(lastIdx));
-                right++;
-            }
+            int left = list.indexOf(pick);
+            int right = list.size() - left;
 
             if (left > right) {
+                for (int i = 0; i < right; i++) {
+                    list.addFirst(list.removeLast());
+                }
                 count += right;
-                list = tmp2;
             } else {
+                for (int i = 0; i < left; i++) {
+                    list.addLast(list.removeFirst());
+                }
                 count += left;
-                list = tmp1;
             }
-            list.remove(0);
+
+            list.removeFirst();
         }
 
         System.out.println(count);
-    }
-
-    static boolean isAvailablePick(List<Integer> list, int num) {
-        return list.get(0) == num;
     }
 }
