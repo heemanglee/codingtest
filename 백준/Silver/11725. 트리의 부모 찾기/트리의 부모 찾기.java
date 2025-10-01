@@ -26,21 +26,22 @@ public class Main {
             graph.get(node2).add(node1);
         }
 
+        boolean[] visited = new boolean[N + 1];
         int[] result = new int[N + 1];
+
         Queue<Integer> que = new ArrayDeque<>();
-        for (int child : graph.get(1)) {
-            que.offer(child);
-            result[child] = 1;
-        }
+        que.offer(1);
+        visited[1] = true;
 
         while (!que.isEmpty()) {
             int parent = que.poll();
             for (int child : graph.get(parent)) {
-                if (result[child] != 0) {
+                if (visited[child]) {
                     continue;
                 }
                 que.offer(child);
                 result[child] = parent;
+                visited[child] = true;
             }
         }
 
