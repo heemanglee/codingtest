@@ -35,6 +35,12 @@ public class Main {
                 case "add":
                     p = Integer.parseInt(st.nextToken());
                     l = Integer.parseInt(st.nextToken());
+
+                    Pair old = pairMap.get(p);
+                    if (old != null) {
+                        pairSet.remove(old);
+                    }
+
                     Pair pair = new Pair(p, l);
                     pairSet.add(pair);
                     pairMap.put(p, pair);
@@ -43,7 +49,7 @@ public class Main {
                     x = Integer.parseInt(st.nextToken());
                     sb.append(x == -1 ? pairSet.first().p : pairSet.last().p).append("\n");
                     break;
-                default:
+                case "solved":
                     p = Integer.parseInt(st.nextToken());
                     pairSet.remove(pairMap.get(p));
                     pairMap.remove(p);
@@ -64,10 +70,8 @@ public class Main {
 
         @Override
         public int compareTo(Pair o) {
-            if (this.l == o.l) {
-                return this.p - o.p;
-            }
-            return this.l - o.l;
+            if (this.l == o.l) return Integer.compare(this.p, o.p);
+            return Integer.compare(this.l, o.l);
         }
     }
 }
