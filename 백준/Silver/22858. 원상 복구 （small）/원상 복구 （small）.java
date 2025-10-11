@@ -37,7 +37,10 @@ public class Main {
                 tmp[moveIdx] = num;
             }
 
-            pArr = tmp.clone();
+            // Object.clone(): O(N) 발생 -> 1회 셔플할 때마다 O(2N)이 발생.
+            int[] t = pArr;
+            pArr = tmp;
+            tmp = t;
         }
 
         StringBuilder sb = new StringBuilder();
